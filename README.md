@@ -57,5 +57,5 @@ Credits
 -------
 
 Original work by Kyle Manna [https://github.com/kylemanna/docker-bitcoind](https://github.com/kylemanna/docker-bitcoind).
-Modified to use Bitcoin XT instead Bitcoin Core.
+Modified to use Bitcoin XT instead of Bitcoin Core.
 
