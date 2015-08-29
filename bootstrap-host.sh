@@ -4,7 +4,7 @@
 #
 set -ex
 
-BTC_IMAGE=${BTC_IMAGE:-kylemanna/bitcoind}
+BTC_IMAGE=${BTC_IMAGE:-keo604/bitcoinxt}
 
 distro=$1
 shift
@@ -23,7 +23,7 @@ fi
 
 free -m
 
-if [ "$distro" = "trusty" -o "$distro" = "ubuntu:14.04" ]; then
+if [ "$distro" = "trusty" -o "$distro" = "ubuntu:14.04.3" ]; then
     curl https://get.docker.io/gpg | apt-key add -
     echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
 
@@ -35,9 +35,9 @@ if [ "$distro" = "trusty" -o "$distro" = "ubuntu:14.04" ]; then
 fi
 
 # Always clean-up, but fail successfully
-docker kill bitcoind-data bitcoind-node 2>/dev/null || true
-docker rm bitcoind-data bitcoind-node 2>/dev/null || true
-stop docker-bitcoind 2>/dev/null || true
+docker kill bitcoinxt-data bitcoinxt-node 2>/dev/null || true
+docker rm bitcoinxt-data bitcoinxt-node 2>/dev/null || true
+stop docker-bitcoinxt 2>/dev/null || true
 
 # Always pull remote images to avoid caching issues
 if [ -z "${BTC_IMAGE##*/*}" ]; then
@@ -45,13 +45,13 @@ if [ -z "${BTC_IMAGE##*/*}" ]; then
 fi
 
 # Initialize the data container
-docker run --name=bitcoind-data -v /bitcoin busybox chown 1000:1000 /bitcoin
-docker run --volumes-from=bitcoind-data --rm $BTC_IMAGE btc_init
+docker run --name=bitcoinxt-data -v /bitcoin busybox chown 1000:1000 /bitcoin
+docker run --volumes-from=bitcoinxt-data --rm $BTC_IMAGE btc_init
 
-# Start bitcoind via upstart and docker
-curl https://raw.githubusercontent.com/kylemanna/docker-bitcoind/master/upstart.init > /etc/init/docker-bitcoind.conf
-start docker-bitcoind
+# Start bitcoinxt via upstart and docker
+curl https://raw.githubusercontent.com/keo/docker-bitcoinxt/master/upstart.init > /etc/init/docker-bitcoinxt.conf
+start docker-bitcoinxt
 
 set +ex
 echo "Resulting bitcoin.conf:"
-docker run --volumes-from=bitcoind-data --rm $BTC_IMAGE cat /bitcoin/.bitcoin/bitcoin.conf
+docker run --volumes-from=bitcoinxt-data --rm $BTC_IMAGE cat /bitcoin/.bitcoin/bitcoin.conf
