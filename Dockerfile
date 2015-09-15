@@ -7,7 +7,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 97B6956B && \
     echo 'deb [ arch=amd64 ] http://bitcoinxt.software.s3-website-us-west-2.amazonaws.com/apt wheezy main' > /etc/apt/sources.list.d/bitcoinxt.list
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y bitcoinxt=0.11B && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y bitcoinxt && \
     DEBIAN_FRONTEND=noninteractive apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
